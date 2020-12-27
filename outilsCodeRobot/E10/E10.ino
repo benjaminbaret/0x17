@@ -24,8 +24,8 @@ int degreParTick = 16;
 int objectifDistance = 0;
 int objectifTicks = 0;
 
-volatile unsigned int angleParcouru = 0;
-volatile double toursParSeconde = 0;
+volatile  int angleParcouru = 0;
+volatile double toursParSeconde =0;
 
 
 
@@ -51,7 +51,7 @@ void setup()
   digitalWrite(moteurDroitVitesse, LOW);
   digitalWrite(moteurDroitDirection, HIGH);
 
-  timer.setInterval(1000, compteur);
+    timer.setInterval(1000, compteur);
 
   attachInterrupt(digitalPinToInterrupt(capteurMoteurDroit), ajoutTicksMD, RISING);
 
@@ -69,7 +69,11 @@ void ajoutTicksMD() {
 void loop()
 {
   timer.run();
-  distanceDemandee = 0;
+  int var = 0;
+  if(distanceDemandee == compteurTicksMoteurDroit){
+      distanceDemandee = 0;
+      compteurTicksMoteurDroit = 0;
+  }
 
   if (Serial.available()) {
     distanceDemandee = Serial.parseInt();
@@ -77,23 +81,30 @@ void loop()
 
 
 
-  digitalWrite(moteurDroitDirection, LOW);
   if (distanceDemandee > 0) {
-    while (compteurTicksMoteurDroit != distanceDemandee) {
-      analogWrite(moteurDroitVitesse, 1000);
+    if ((compteurTicksMoteurDroit <= distanceDemandee) && (distanceDemandee != 0)) {
+
+       var = 1000;
+       
 
       Serial.print("Vitesse moteur : ");
-      Serial.print(toursParSeconde);
+  Serial.print(toursParSeconde);
 
-      Serial.print("Angle parcouru (en deg): ");
-      Serial.print(angleParcouru);
+  Serial.print("    / Angle parcouru (en deg): ");
+  Serial.println(angleParcouru);
+      
+    }
+    
+  }
+  else {
+            var = 0;
 
     }
-  }
 
-  compteurTicksMoteurDroit = 0;
-  analogWrite(moteurDroitVitesse, 0);
+     digitalWrite(moteurDroitDirection, LOW);
+      analogWrite(moteurDroitVitesse, var);
 
+  
 
 
 
@@ -105,13 +116,13 @@ void loop()
 
 
 
-void compteur() {
+void compteur(){
   const double tick1 = compteurTicksMoteurDroitVitesse;
-  compteurTicksMoteurDroitVitesse = 0;
-  toursParSeconde = tick1 / 22;
+  compteurTicksMoteurDroitVitesse = 0; 
+  toursParSeconde = tick1/ 22;
 
-  angleParcouru = compteurTicksMoteurDroit * 16;
-
-
-
+  angleParcouru = compteurTicksMoteurDroit*16;
+  
+  
+  
 }
