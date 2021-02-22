@@ -4,7 +4,7 @@
 
 #define moteurDroitVitesse 5
 #define moteurDroitDirection 0
-#define capteurMoteurDroit 15
+#define capteurMoteurDroit 13
 
 SimpleTimer timer;
 
