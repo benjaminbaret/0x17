@@ -1,0 +1,31 @@
+Oral PSTE : 
+
+
+
+Partie du robot : 
+
+- Dire que on a utilisé les différents modules (RFID, SERVO MOTEUR, Blynk / moteurs, on peut faire avancer et tourner le robot d'un angle voulu, capteur distances, capteurs fin de course etc.. )
+
+- Pince fabriquée en 3D en utilisant le gros servo moteur 
+
+
+
+
+
+
+- Les deux autres servo moteurs serviront à faire pivoter les capteurs de distance afin de voir la distance des obstacles
+
+--> Impression de pieces en 3D nous permettant de maintenir l'ensemble
+--> Nous prevoyons de modéliser le robot en entier sur un logiciel 3D afin de pouvoir imaginer de nouvelles pièces et de les assembler dans le virtuel avant de les créer en vrai
+--> On peut réutiliser ce que l'on a fait pour le projet de physique appliquée pour le projet PSTE 
+--> asservissement en vitesse et en position éventuellement réutilisable pour projet 
+--> Utilisation de Blynk pour faire avancer le robot 
+
+Parler de MQTT
+
+
+
+Montrer le robot, dire ce qui a été fait (assemblage + soudure des cables car faux contacts)
+Asservissements et vitesse et position --> Et avancer et tourner d'un certain angle
+Rachat de fourches optiques car anciennes cassées
+
