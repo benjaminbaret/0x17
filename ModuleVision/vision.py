@@ -29,7 +29,7 @@ def empty(a):
 print("CV2 importé")
 
 #importation de l'image
-img = cv2.imread("data/I2FDT-PLG-10.png")
+img = cv2.imread("I2FDT-PLG-10.png")
 imgResized = cv2.resize(img,(750,500))
 horizontal = np.hstack((imgResized,imgResized))
 vertical = np.vstack((imgResized,imgResized))

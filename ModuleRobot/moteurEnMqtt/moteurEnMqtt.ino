@@ -1,4 +1,4 @@
-#include <SimpleTimer.h>
+<#include <SimpleTimer.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
@@ -12,7 +12,6 @@ const char* mqttServer = "35.180.248.89";
 const int mqttPort = 1883;
 const char* mqttUser = "0x17";
 const char* mqttPassword = "WP06qS";
-
 
 
 
@@ -36,9 +35,29 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 
+volatile unsigned int compteurTicksMoteurGaucheAsservissement;
 volatile unsigned int compteurTicksMoteurGauche;
 volatile unsigned int compteurTicksMoteurDroit;
 
+volatile double toursParSecondeMoteurGaucheAsservissement;
+volatile double toursParSecondeMoteurDroit;
+volatile double toursParSecondeMoteurGauche;
+
+volatile double vitesseDemandeeTS = 0;
+
+
+volatile long vitesseMoteurs = 1000;
+int periodeEchantillonage = 100;
+double rapportReducteurMoteur = 48;
+
+float kp=250; //coefficient proportionnel
+float ki=2.5; //coefficient intégrateur
+float kd=20; //coefficient dérivateur
+
+
+volatile int correction = 0;
+double sommeErreur = 0;
+double erreurPrecedente = 0;
 
 void ICACHE_RAM_ATTR ajoutTicksMG ();
 void ICACHE_RAM_ATTR ajoutTicksMD ();
@@ -77,6 +96,9 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(capteurMoteurGauche), ajoutTicksMG, RISING);
   attachInterrupt(digitalPinToInterrupt(capteurMoteurDroit), ajoutTicksMD, RISING);
 
+   timer.setInterval(periodeEchantillonage, asservissement);
+   timer.setInterval(1000, compteur);
+
 
   /*Connexion au WiFi*/
 
@@ -114,19 +136,32 @@ void setup()
 
   //Serial.println("Publishing");
   //client.publish("0x17", "hello");
-  client.subscribe("0x17/vitesseDemandee");
+  client.subscribe("0x17/distanceDemandee");
 
 
 
 }
 
 
-void ajoutTicksMG() {
+void compteur(){
+  const double tick1 = compteurTicksMoteurDroit;
+  compteurTicksMoteurDroit = 0; 
+  toursParSecondeMoteurDroit = (tick1/ 22);
+
+  const double tick2 = compteurTicksMoteurGauche;
+  compteurTicksMoteurGauche = 0; 
+  toursParSecondeMoteurGauche = (tick2/ 22);
+
+  
+}
+
+
+void ajoutTicksMD(){
+  compteurTicksMoteurGaucheAsservissement;
+}
+
+void ajoutTicksMG(){
   compteurTicksMoteurGauche++;
-}
-
-void ajoutTicksMD() {
-  compteurTicksMoteurDroit++;
 }
 
 
@@ -151,37 +186,35 @@ void loop()
 void callback(char*topic, byte*payload, unsigned int length) {
 
 
-  if (topic = "0x17/vitesseDemandee") {
-    Serial.print("Message arrived in topic: ");
-    Serial.println(topic); Serial.print("Message:");
+  if (topic = "0x17/distanceDemandee") {
 
-    int distanceDemandee = atoi((char *)payload);
+    distanceDemandee = atoi((char *)payload);
 
-    Serial.print(distanceDemandee);
 
     if (distanceDemandee > 0) {
-      digitalWrite(moteurGaucheDirection, LOW);
+     
       digitalWrite(moteurDroitDirection, LOW);
       while (compteurTicksMoteurGauche != distanceDemandee && compteurTicksMoteurDroit != distanceDemandee) {
-        analogWrite(moteurGaucheVitesse, 1000);
+          
+       analogWrite(moteurGaucheVitesse, correction);
+  
+       
         analogWrite(moteurDroitVitesse, 1000);
-        Serial.print("Ticks Roue : ");
-        Serial.println(compteurTicksMoteurGauche);
-        Serial.print("Ticks Roue : ");
-        Serial.println(compteurTicksMoteurDroit);
+
+   
+
       }
     }
 
     else if (distanceDemandee < 0) {
-      digitalWrite(moteurGaucheDirection, HIGH);
+      
       digitalWrite(moteurDroitDirection, HIGH);
       while (-compteurTicksMoteurGauche != distanceDemandee && -compteurTicksMoteurDroit != distanceDemandee) {
-        analogWrite(moteurGaucheVitesse, 1000);
+        analogWrite(moteurGaucheVitesse, correction);
+  
+       
         analogWrite(moteurDroitVitesse, 1000);
-        Serial.print("Ticks Roue : ");
-        Serial.println(compteurTicksMoteurGauche);
-        Serial.print("Ticks Roue : ");
-        Serial.println(compteurTicksMoteurDroit);
+
       }
     }
 
@@ -200,8 +233,29 @@ void callback(char*topic, byte*payload, unsigned int length) {
     Serial.println(); Serial.println("-----------------------");
 
   }
+  }
+
+
+void asservissement() {
 
 
 
+   double ticks = compteurTicksMoteurGaucheAsservissement;
+   compteurTicksMoteurGaucheAsservissement = 0;
 
+    double frequenceRoueCodeuse = periodeEchantillonage*ticks;
+    toursParSecondeMoteurGaucheAsservissement = frequenceRoueCodeuse / 22 / rapportReducteurMoteur;
+    double erreur = vitesseMoteurs - toursParSecondeMoteurGaucheAsservissement;
+
+    sommeErreur += erreur;
+    double differenceErreur = erreur - erreurPrecedente;
+    erreurPrecedente = erreur;
+
+
+
+    //correction = kp*erreur + ki*sommeErreur + kd*differenceErreur;
+    correction = kp*erreur;
+ 
+  
+  
 }

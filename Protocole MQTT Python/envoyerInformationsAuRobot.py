@@ -35,11 +35,11 @@ client.subscribe("0x17")
 time.sleep(5)
 
 while isEnd:
-    print("Vitesse souhaitée : ")
+    print("Distance souhaitée : ")
     vitesse = input()
     if vitesse == -1:
         isEnd = 0
-    client.publish("0x17/vitesseDemandee", vitesse)
+    client.publish("0x17/distanceDemandee", vitesse)
     print("Message published")
 
 
