@@ -1,3 +1,6 @@
+## ce code permet d' envoyer et recevoir des informations
+
+
 import paho.mqtt.client as mqttClient
 import time
 
