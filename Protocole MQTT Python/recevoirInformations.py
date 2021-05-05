@@ -5,6 +5,15 @@ def on_message(client, userdata, message):
     print("Message recived"+str(message.payload.decode("utf-8")))
     print("Topic"+str(message.topic))
 
+### Code on_message pour recevoir une image
+"""
+def on_message(client, userdata, msg):
+    print ("Topic : ", msg.topic)
+    f = open("output.jpg", "wb")  #there is a output.jpg which is different
+    f.write(msg.payload)
+    f.close()
+
+"""
 
 
 connected=False
