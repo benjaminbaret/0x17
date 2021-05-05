@@ -1,3 +1,9 @@
+1 tour de roue = 22 ticks = 21 cm parcourus
+
+
+
+
+
 Dossier code source Robot : 
 En cours 
 
