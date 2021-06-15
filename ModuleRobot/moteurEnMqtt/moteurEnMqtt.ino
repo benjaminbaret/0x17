@@ -1,11 +1,11 @@
-<#include <SimpleTimer.h>
+#include <SimpleTimer.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
 
 /*Variables de connexion a configurer*/
 
-const int LED = 13;
+
 const char* ssid = "SFR_B320";
 const char* password = "ibfabjaphyeccamtios7";
 const char* mqttServer = "35.180.248.89";
@@ -132,10 +132,9 @@ void setup()
     }
   }
 
-  /*NB: Les topics fournis ici sont des topics de test. Veillez a bien lesremplacer par ceux auxquels votre equipe a acces.*/
 
-  //Serial.println("Publishing");
-  //client.publish("0x17", "hello");
+
+  client.publish("0x17", "hello");
   client.subscribe("0x17/distanceDemandee");
 
 
@@ -170,6 +169,7 @@ void loop()
 {
 
   client.loop();
+  
 
 
 }
@@ -186,7 +186,19 @@ void loop()
 void callback(char*topic, byte*payload, unsigned int length) {
 
 
-  if (topic = "0x17/distanceDemandee") {
+
+Serial.print("Message arrived in topic: ");
+Serial.println(topic);Serial.print("Message:");
+for (int i = 0; i < length; i++) 
+{Serial.print((char)payload[i]);}
+Serial.println();Serial.println("-----------------------");
+
+
+}
+
+
+
+  /*if (topic = "0x17/distanceDemandee") {
 
     distanceDemandee = atoi((char *)payload);
 
@@ -233,7 +245,7 @@ void callback(char*topic, byte*payload, unsigned int length) {
     Serial.println(); Serial.println("-----------------------");
 
   }
-  }
+  }*/
 
 
 void asservissement() {

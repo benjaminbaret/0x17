@@ -27,6 +27,7 @@ user = "0x17"
 password = "WP06qS"
 
 isEnd=1
+choix = 0
 
 client = mqttClient.Client("Client")
 client.username_pw_set(user, password=password)
@@ -37,13 +38,23 @@ client.loop_start()
 time.sleep(5)
 
 while isEnd:
-    print("Distance souhaitée : ")
-    vitesse = input()
-    if vitesse == -1:
-        isEnd = 0
-    client.publish("0x17/distanceDemandee", vitesse)
-    print("Message published")
-
+    print("CHOIX : 1(distance) / 2(tourner degré) : ")
+    choix = input()
+    choix = int(choix)
+    if choix == 1:
+        print("Vitesse ? ")
+        vitesse = input()
+        vitesse = int(vitesse)
+        client.publish("0x17/robotX", "null")
+        client.publish("0x17/robotX", vitesse)
+        print("Message published")
+    elif choix == 2:
+        print("Degre ? ")
+        degre = input()
+        degre = int(degre)
+        client.publish("0x17/tourner", "null")
+        client.publish("0x17/tourner", degre)
+        print("Message published")
 
 while connected != True:
     time.sleep(0.2)

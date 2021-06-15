@@ -33,7 +33,7 @@
       <recent name="C:\Users\benja\Documents\ING2\PSTE\0x17\Protocole MQTT Python" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.envoiImage">
+  <component name="RunManager" selected="Python.envoyerInformationsAuRobot">
     <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Protocole MQTT Python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -120,15 +120,15 @@
     </configuration>
     <list>
       <item itemvalue="Python.Unnamed" />
+      <item itemvalue="Python.envoiImage" />
       <item itemvalue="Python.envoyerInformationsAuRobot" />
       <item itemvalue="Python.recevoirInformations" />
-      <item itemvalue="Python.envoiImage" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.envoiImage" />
         <item itemvalue="Python.envoyerInformationsAuRobot" />
         <item itemvalue="Python.recevoirInformations" />
+        <item itemvalue="Python.envoiImage" />
       </list>
     </recent_temporary>
   </component>

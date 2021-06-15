@@ -96,7 +96,7 @@ void loop()
     while (compteurTicksMoteurGauche != distanceDemandee && compteurTicksMoteurDroit != distanceDemandee) {
       analogWrite(moteurGaucheVitesse, 1000);
       analogWrite(moteurDroitVitesse, 1000);
-      Serial.print("Ticks Roue : ");
+      Serial.print("Ticks RoueG : ");
       Serial.println(compteurTicksMoteurGauche); 
       Serial.print("Ticks Roue : ");
       Serial.println(compteurTicksMoteurDroit); 

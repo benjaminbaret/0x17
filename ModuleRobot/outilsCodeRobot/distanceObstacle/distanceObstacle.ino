@@ -1,5 +1,5 @@
-int trigger  = 15;
-int echo = 13;
+int trigger  = 12;
+int echo = 14;
 
 const unsigned long measureTimeout = 25000UL; 
 const float soundSpeed = 340.0 / 1000;
